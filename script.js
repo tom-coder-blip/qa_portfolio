@@ -61,30 +61,6 @@
     sections.forEach(s => spy.observe(s));
   }
 
-  // ----- count-up stats -----
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const counters = document.querySelectorAll('[data-count]');
-  const animateCount = el => {
-    const target = Number(el.dataset.count);
-    const start = performance.now();
-    const dur = 1600;
-    const step = now => {
-      const p = Math.min((now - start) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * eased).toLocaleString('en-US');
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  };
-  if (!reduce && 'IntersectionObserver' in window) {
-    const co = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { animateCount(entry.target); co.unobserve(entry.target); }
-      });
-    }, { threshold: 0.6 });
-    counters.forEach(el => co.observe(el));
-  }
-
   // ----- certificate lightbox -----
   const lb = document.getElementById('lightbox');
   const certBtns = [...document.querySelectorAll('.cert-btn')];
